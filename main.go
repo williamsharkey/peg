@@ -1,4 +1,4 @@
-package main
+package peg
 
 import (
 	"fmt"
@@ -49,8 +49,4 @@ func Example() {
 	for i, s := range r {
 		fmt.Println(tests[i], "=>", s)
 	}
-}
-
-func main() {
-	Example()
 }
