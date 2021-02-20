@@ -1,6 +1,9 @@
-package peg
+package main
 
-import "github.com/yhirose/go-peg"
+import (
+	"fmt"
+	"github.com/yhirose/go-peg"
+)
 
 func TestParser(grammar string, tests ...string) (results []string) {
 
@@ -37,5 +40,14 @@ func Example() {
     %binop = L * /  # Precedence level 2
 	%binop = L &    # Precedence level 3
 `
-	TestParser(grammar, `"hello"&world`, `"hello"&"cool"&"world"`, `"hi "&"world"`)
+	tests := []string{`"hello"&world`, `"hello"&"cool"&"world"`, `"hi "&"world"`}
+	r := TestParser(grammar, tests...)
+
+	for i, s := range r {
+		fmt.Println(tests[i], "=>", s)
+	}
+}
+
+func main() {
+	Example()
 }
