@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/yhirose/go-peg"
+	"strings"
 )
 
-func TestParser(grammar string, tests ...string) (results []string) {
+func TestParser(grammar string, testsJoined string) (resultsJoined string) {
 
+	tests := strings.Split(testsJoined, "~")
+	results := []string{}
 	formulaParser, err := peg.NewParser(grammar)
 	if err != nil {
 		results = append(results, err.Error())
@@ -21,7 +24,7 @@ func TestParser(grammar string, tests ...string) (results []string) {
 			results = append(results, ast.String())
 		}
 	}
-	return
+	return strings.Join(results, "~")
 }
 
 func Example() {
@@ -41,7 +44,7 @@ func Example() {
 	%binop = L &    # Precedence level 3
 `
 	tests := []string{`"hello"&world`, `"hello"&"cool"&"world"`, `"hi "&"world"`}
-	r := TestParser(grammar, tests...)
+	r := strings.Split(TestParser(grammar, strings.Join(tests, "~")), "~")
 
 	for i, s := range r {
 		fmt.Println(tests[i], "=>", s)
