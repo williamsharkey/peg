@@ -29,6 +29,7 @@ func TestParser(grammar string, test string) (ast string) {
 
 func Example() {
 	grammar := `
+# Add Comment
 # Simple calculator
 EXPR         ←  ATOM (BINOP ATOM)*
 ATOM         ←  NUMBER / ('(' EXPR ')') / ('"' TEXT '"')
