@@ -29,19 +29,19 @@ func TestParser(grammar string, test string) (ast string) {
 
 func Example() {
 	grammar := `
-    # Simple calculator
-    EXPR         ←  ATOM (BINOP ATOM)*
-    ATOM         ←  NUMBER / ('(' EXPR ')') / ('"' TEXT '"')
-    BINOP        ←  < [-+/*&] >
-    NUMBER       ←  < [0-9]+ >
-	TEXT         ←  < [A-Za-Z]+ >
-    %whitespace  ←  [ \t]*
-    ---
-    # Expression parsing option
-    %expr  = EXPR   # Rule to apply 'precedence climbing method' to
-    %binop = L + -  # Precedence level 1
-    %binop = L * /  # Precedence level 2
-	%binop = L &    # Precedence level 3
+# Simple calculator
+EXPR         ←  ATOM (BINOP ATOM)*
+ATOM         ←  NUMBER / ('(' EXPR ')') / ('"' TEXT '"')
+BINOP        ←  < [-+/*&] >
+NUMBER       ←  < [0-9]+ >
+TEXT         ←  < [A-Za-Z]+ >
+%whitespace  ←  [ \t]*
+---
+# Expression parsing option
+%expr  = EXPR   # Rule to apply 'precedence climbing method' to
+%binop = L + -  # Precedence level 1
+%binop = L * /  # Precedence level 2
+%binop = L &    # Precedence level 3
 `
 	tests := []string{`"hello"&world`, `"hello"&"cool"&"world"`, `"hi "&"world"`}
 	r := strings.Split(TestParser(grammar, strings.Join(tests, "~")), "~")
