@@ -1,4 +1,4 @@
-package peg
+package main
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ func TestParser(grammar string, testsJoined string) (resultsJoined string) {
 	formulaParser, err := peg.NewParser(grammar)
 	if err != nil {
 		results = append(results, err.Error())
-		return
+		return strings.Join(results, "~")
 	}
 
 	for _, t := range tests {
@@ -49,4 +49,9 @@ func Example() {
 	for i, s := range r {
 		fmt.Println(tests[i], "=>", s)
 	}
+}
+
+func main() {
+	Example()
+
 }
