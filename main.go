@@ -1,4 +1,4 @@
-package main
+package peg
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-func TestParser(grammar string, testsJoined string) (resultsJoined string) {
+func TestParser(grammar string, test string) (ast string) {
 
-	tests := strings.Split(testsJoined, "~")
+	tests := strings.Split(test, "~")
 	results := []string{}
 	formulaParser, err := peg.NewParser(grammar)
 	if err != nil {
@@ -51,7 +51,24 @@ func Example() {
 	}
 }
 
-func main() {
-	Example()
+func GrammarExample() string {
+	return `
+    # Simple calculator
+    EXPR         ←  ATOM (BINOP ATOM)*
+    ATOM         ←  NUMBER / ('(' EXPR ')') / ('"' TEXT '"')
+    BINOP        ←  < [-+/*&] >
+    NUMBER       ←  < [0-9]+ >
+	TEXT         ←  < [A-Za-Z]+ >
+    %whitespace  ←  [ \t]*
+    ---
+    # Expression parsing option
+    %expr  = EXPR   # Rule to apply 'precedence climbing method' to
+    %binop = L + -  # Precedence level 1
+    %binop = L * /  # Precedence level 2
+	%binop = L &    # Precedence level 3
+`
+}
 
+func TestExample() string {
+	return `"hello"&world~"hello"&"cool"&"world"~"hi "&"world"`
 }
