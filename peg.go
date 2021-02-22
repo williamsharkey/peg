@@ -28,7 +28,17 @@ func TestParser(grammar string, test string) (ast string) {
 }
 
 func Example() {
-	grammar := `
+	grammar := GrammarExample()
+
+	r := strings.Split(TestParser(grammar, TestExample()), "~")
+	tests := strings.Split(TestExample(), "~")
+	for i, s := range r {
+		fmt.Println(tests[i], "=>", s)
+	}
+}
+
+func GrammarExample() string {
+	return `
 # Add Comment
 # Simple calculator
 EXPR         ←  ATOM (BINOP ATOM)*
@@ -43,30 +53,6 @@ TEXT         ←  < [A-Za-Z]+ >
 %binop = L + -  # Precedence level 1
 %binop = L * /  # Precedence level 2
 %binop = L &    # Precedence level 3
-`
-	tests := []string{`"hello"&world`, `"hello"&"cool"&"world"`, `"hi "&"world"`}
-	r := strings.Split(TestParser(grammar, strings.Join(tests, "~")), "~")
-
-	for i, s := range r {
-		fmt.Println(tests[i], "=>", s)
-	}
-}
-
-func GrammarExample() string {
-	return `
-    # Simple calculator
-    EXPR         ←  ATOM (BINOP ATOM)*
-    ATOM         ←  NUMBER / ('(' EXPR ')') / ('"' TEXT '"')
-    BINOP        ←  < [-+/*&] >
-    NUMBER       ←  < [0-9]+ >
-	TEXT         ←  < [A-Za-Z]+ >
-    %whitespace  ←  [ \t]*
-    ---
-    # Expression parsing option
-    %expr  = EXPR   # Rule to apply 'precedence climbing method' to
-    %binop = L + -  # Precedence level 1
-    %binop = L * /  # Precedence level 2
-	%binop = L &    # Precedence level 3
 `
 }
 
