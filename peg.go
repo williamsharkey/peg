@@ -17,11 +17,11 @@ func TestParser(grammar string, test string) (ast string) {
 	}
 
 	for _, t := range tests {
-		ast, err := formulaParser.ParseAndGetAst(t, nil)
-		if err != nil {
-			results = append(results, err.Error())
+		s, errP := formulaParser.ParseAndGetValue(t, nil)
+		if errP != nil {
+			results = append(results, errP.Error())
 		} else {
-			results = append(results, ast.String())
+			results = append(results, fmt.Sprint(s))
 		}
 	}
 	return strings.Join(results, "~")
@@ -57,9 +57,5 @@ TEXT         ←  < [A-Za-Z]+ >
 }
 
 func TestExample() string {
-	return `"hello"&world~"hello"&"cool"&"world"~"hi "&"world"`
-}
-
-func init() {
-	println(GrammarExample())
+	return `1~"hello"&world~"hello"&"cool"&"world"~"hi "&"world"`
 }
