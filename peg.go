@@ -73,3 +73,7 @@ func GrammarExample() string {
 func TestExample() string {
 	return `"hello"&world~"hello"&"cool"&"world"~"hi "&"world"`
 }
+
+func init() {
+	println(GrammarExample())
+}
