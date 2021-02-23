@@ -63,17 +63,18 @@ func Example() {
 
 func GrammarExample() string {
 	return `
-    # Simple calculator
-    EXPR         ←  ATOM (BINOP ATOM)*
-    ATOM         ←  NUMBER / '(' EXPR ')'
-    BINOP        ←  < [-+/*] >
-    NUMBER       ←  < [0-9]+ >
-    %whitespace  ←  [ \t]*
-    ---
-    # Expression parsing option
-    %expr  = EXPR   # Rule to apply 'precedence climbing method' to
-    %binop = L + -  # Precedence level 1
-    %binop = L * /  # Precedence level 2
+# Simple calculator
+EXPR         ←  ATOM (BINOP ATOM)*
+ATOM         ←  NUMBER / STRING / '(' EXPR ')'
+BINOP        ←  < [-+/*] >
+NUMBER       ←  < [0-9]+ >
+STRING     ←        < ["] (!('"').)* ["] >
+%whitespace  ←  [ \t]*
+---
+# Expression parsing option
+%expr  = EXPR   # Rule to apply 'precedence climbing method' to
+%binop = L + -  # Precedence level 1
+%binop = L * /  # Precedence level 2
 `
 }
 
