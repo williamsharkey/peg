@@ -6,28 +6,23 @@ import (
 	"strings"
 )
 
-func TestParser(grammar string, test string) (ast string) {
+func TestParser(grammar string, test string) (results string) {
 
-	tests := strings.Split(test, "\n")
-	results := []string{}
 	parser, err := peg.NewParser(grammar)
 	if err != nil {
-		results = append(results, "Grammar Parse Error: "+err.Error())
-		return strings.Join(results, "\n")
+		return "Grammar Parse Error: " + err.Error()
 	}
-
 	parser.EnableAst()
 
-	for _, t := range tests {
+	for _, t := range strings.Split(test, "\n") {
 		s, errP := parser.ParseAndGetAst(t, nil)
-		//s, errP := formulaParser.ParseAndGetValue(t, nil)
 		if errP != nil {
-			results = append(results, t+"\nError: \n"+errP.Error())
+			results += fmt.Sprintf("s:\nError: %s\n", t, errP)
 		} else {
-			results = append(results, t+":\n"+fmt.Sprint(s))
+			results += fmt.Sprintf("%s:\n%s\n", t, s)
 		}
 	}
-	return strings.Join(results, "\n")
+	return results
 }
 
 func GrammarExample() string {
