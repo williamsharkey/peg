@@ -30,17 +30,18 @@ func GrammarExample() string {
 
 # Grammar with strings
 EXPR         ←  ATOM (BINOP ATOM)*
-ATOM         ←  NUMBER / STRING / '(' EXPR ')' / REF
+ATOM         ←  NUMBER / STRING / REF / '(' EXPR ')'
 BINOP        ←  < [-+/*&] >
 NUMBER       ←  < [0-9]+ >
-REF          ←  < (!(BINOP).)* >
-STRING       ←  < ["] (!('"')./'""')* ["] >
+REF          ←  < (!(BINOP/'"').)+ >
+STRING       ←  ["] < (!('"')./'""')* > ["]
 %whitespace  ←  [ \t]*
 ---
 # Expression parsing option
-%expr  = EXPR   # Rule to apply 'precedence climbing method' to
+%expr  = EXPR     # Rule to apply 'precedence climbing method' to
 %binop = L + - &  # Precedence level 1
-%binop = L * /  # Precedence level 2
+%binop = L * /    # Precedence level 2
+
 
 `
 }
