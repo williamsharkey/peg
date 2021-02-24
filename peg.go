@@ -17,7 +17,7 @@ func TestParser(grammar string, test string) (results string) {
 	for _, t := range strings.Split(test, "\n") {
 		s, errP := parser.ParseAndGetAst(t, nil)
 		if errP != nil {
-			results += fmt.Sprintf("s:\nError: %s\n", t, errP)
+			results += fmt.Sprintf("s:\nError: %s\n", t, errP.Error())
 		} else {
 			results += fmt.Sprintf("%s:\n%s\n", t, s)
 		}
