@@ -31,18 +31,19 @@ func GrammarExample() string {
 :note: Grammar with strings
 EXPR         ←  ATOM (BINOP ATOM)*
 ATOM         ←  NUMBER / STRING / ATFN / REF / '(' EXPR ')'
-ATFN         ←  '@' <[A-Za-z]*> '(' <ATOM> ( ',' <ATOM>)*  ')' 
-BINOP        ←  < [-+/*&] / '#OR#' >
-NUMBER       ←  < [0-9]+ >
-REF          ←  < (!(BINOP/'"'/ [ \t]).)+ >
+ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?  
+FN_NAME      ←  <[A-Za-z]*>
+BINOP        ←  [-+/*&=<>] / '<>' / '<=' / '>=' / '#OR#'
+NUMBER       ←  < [0-9]+ ([.] [0-9]* )? >
+REF          ←  [a-zA-Z$:0-9_]+
 STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]* 
 %whitespace  ←  [ \t]*
 ---
 :note: Expression parsing option
-%expr  = EXPR     :note: Rule to apply 'precedence climbing method' to
-%binop = L #OR#   :note: Precedence level 1
-%binop = L + - &  :note: Precedence level 2
-%binop = L * /    :note: Precedence level 3
+%expr  = EXPR                  :note: apply precedence climbing to EXPR
+%binop = L = <> #OR# < > <= >= :note: Precedence level 1
+%binop = L + - &               :note: Precedence level 2
+%binop = L * /                 :note: Precedence level 3
 
 `
 }
