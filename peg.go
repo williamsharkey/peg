@@ -33,7 +33,7 @@ EXPR         ←  ATOM (BINOP ATOM)*
 ATOM         ←  NUMBER / STRING / ATFN / REF / '(' EXPR ')'
 ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?  
 FN_NAME      ←  <[A-Za-z]*>
-BINOP        ←  [-+/*&=<>] / '<>' / '<=' / '>=' / '#OR#'
+BINOP        ←  '<>' / '<=' / '>=' / '#OR#'/ [-+/*&=<>]
 NUMBER       ←  < [0-9]+ ([.] [0-9]* )? >
 REF          ←  [a-zA-Z$:0-9_]+
 STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]* 
@@ -41,7 +41,7 @@ STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]*
 ---
 :note: Expression parsing option
 %expr  = EXPR                  :note: apply precedence climbing to EXPR
-%binop = L = <> #OR# < > <= >= :note: Precedence level 1
+%binop = L = #OR# < > <= >= <> :note: Precedence level 1
 %binop = L + - &               :note: Precedence level 2
 %binop = L * /                 :note: Precedence level 3
 
@@ -52,5 +52,6 @@ func TestExample() string {
 	return `1+1
 hello
 "hello world"&"abc"
-"a"#OR#"b"`
+"a"#OR#"b"
+1<>2`
 }
