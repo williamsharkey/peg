@@ -53,5 +53,7 @@ func TestExample() string {
 hello
 "hello world"&"abc"
 "a"#OR#"b"
-1<>2`
+1<>2
+($CHECKDATE<=22.2)#OR#($INCLUDEWAIT=0)#OR#($QUARFLAG<>1)
+($CHECKDATE<=<<L:\\Vru\\Flags\\Lincflag.Wk3>>$A$2)#OR#($INCLUDEWAIT=0)#OR#($QUARFLAG<>1)`
 }
