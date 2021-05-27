@@ -35,7 +35,14 @@ ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?
 FN_NAME      ←  <[A-Za-z]*>
 BINOP        ←  '<>' / '<=' / '>=' / '#OR#'/ [-+/*&=<>]
 NUMBER       ←  < [0-9]+ ([.] [0-9]* )? >
-REF          ←  [a-zA-Z$:0-9_]+
+COL ← [A-Z][A-Z]?
+ADDR ← <COL ROW> 
+LOCAL_ADDR ← (SHEET ':')? ADDR
+FN_ADDR ← '<<' [a-zA-Z$:0-9_/]+ '>>' LOCAL_ADDR
+SHEET ←  [A-Z]
+ROW ← NUMBER
+REF_FREE  ←  [a-zA-Z$:0-9_]+
+REF ← FN_ADDR / LOCAL_ADDR > REF_FREE
 STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]* 
 %whitespace  ←  [ \t]*
 ---
@@ -45,11 +52,19 @@ STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]*
 %binop = L + - &               :note: Precedence level 2
 %binop = L * /                 :note: Precedence level 3
 
+
+
 `
 }
 
 func TestExample() string {
-	return `1+1
+	return `A
+1
+A1
+AA1
+AAA1
+B:A
+1+1
 hello
 "hello world"&"abc"
 "a"#OR#"b"
