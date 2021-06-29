@@ -42,7 +42,7 @@ FN_ADDR ← '<<' [a-zA-Z$:0-9_/]+ '>>' LOCAL_ADDR
 SHEET ←  [A-Z]
 ROW ← NUMBER
 REF_FREE  ←  [a-zA-Z$:0-9_]+
-REF ← FN_ADDR / LOCAL_ADDR > REF_FREE
+REF ← FN_ADDR / LOCAL_ADDR / REF_FREE
 STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]* 
 %whitespace  ←  [ \t]*
 ---
