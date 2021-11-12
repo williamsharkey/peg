@@ -13,13 +13,17 @@ func TestParser(grammar string, test string) (results string) {
 		return "Grammar Parse Error: " + err.Error()
 	}
 	parser.EnableAst()
-
+	printTrees := false
 	for _, t := range strings.Split(test, "\n") {
 		s, errP := parser.ParseAndGetAst(t, nil)
 		if errP != nil {
 			results += fmt.Sprintf("s:\nError: %s\n", t, errP.Error())
 		} else {
-			results += fmt.Sprintf("%s:\n%s\n", t, s)
+			if printTrees {
+				results += fmt.Sprintf("%s:\n%s\n", t, s)
+			} else {
+				results += fmt.Sprintf("ok: %s\n", t)
+			}
 		}
 	}
 	return results
@@ -44,16 +48,15 @@ SHEET ←  [A-Z]
 ROW ← NUMBER
 REF_FREE  ←  [a-zA-Z$:0-9_.\\]+
 REF ← FN_ADDR / LOCAL_ADDR / REF_FREE
-STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]* 
+STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]*
 %whitespace  ←  [ \t]*
+
 ---
 :note: Expression parsing option
 %expr  = EXPR                  :note: apply precedence climbing to EXPR
 %binop = L = #OR# < > <= >= <> :note: Precedence level 1
 %binop = L + - &               :note: Precedence level 2
 %binop = L * /                 :note: Precedence level 3
-
-
 
 
 `
