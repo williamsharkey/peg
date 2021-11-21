@@ -39,20 +39,23 @@ func GrammarExample() string {
 
 
 :note: Grammar with strings
+FORMULA      ←  '+'? EXPR
 EXPR         ←  ATOM (BINOP ATOM)*
-ATOM         ←  NUMBER / STRING / ATFN / REF / '(' EXPR ')'
+ATOM         ←  NUMBER / STRING / ATFN / RANGE / REF / '(' EXPR ')'
 ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?  
 FN_NAME      ←  <[A-Za-z]*>
 BINOP        ←  '<>' / '<=' / '>=' / '#OR#'/ [-+/*&=<>]
 NUMBER       ←  < [0-9]+ ([.] [0-9]* )? >
-COL ← [A-Z][A-Z]?
-ADDR ← <'$'? COL '$'? ROW> 
-LOCAL_ADDR ← <( '$'? SHEET ':')? ADDR>
-FN_ADDR ← <'<<' [a-zA-Z$:0-9_/.\\]+ '>>' LOCAL_ADDR>
-SHEET ←  [A-Z]
-ROW ← NUMBER
-REF_FREE  ←  [a-zA-Z$:0-9_.\\]+
-REF ← FN_ADDR / LOCAL_ADDR / REF_FREE
+INTEGER      ←  < [0-9]+ >
+COL          ← [A-Z][A-Z]?
+ADDR         ← <'$'? COL '$'? ROW> 
+LOCAL_ADDR   ← <( '$'? SHEET ':')? ADDR>
+FN_ADDR      ← <'<<' [a-zA-Z$:0-9_/.\\]+ '>>' LOCAL_ADDR>
+SHEET        ←  [A-Z]
+ROW          ← INTEGER
+REF_FREE     ←  [a-zA-Z$:0-9_.\\]+
+REF          ← FN_ADDR / LOCAL_ADDR / REF_FREE
+RANGE        ← REF'..'REF
 STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]*
 %whitespace  ←  [ \t]*
 
@@ -68,7 +71,10 @@ STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]*
 }
 
 func TestExample() string {
-	return `A
+	return `@SUM()
+@SUM(S6)
+@SUM(S6..S8)
+A
 1
 A1
 AA1
@@ -87,7 +93,5 @@ hello
 +"{recalc \B}{system """&"md "&$B$303&@RIGHT("0000"&@STRING(@YEAR($ENDDATE)+1900,0),4)&""""&"}"
 @IF(@HOUR($WAITLOOPTIME)<10,"0"&@STRING(@HOUR($WAITLOOPTIME),0),@STRING(@HOUR($WAITLOOPTIME),0))
 @IF(@MINUTE($WAITLOOPTIME)<10,"0"&@STRING(@MINUTE($WAITLOOPTIME),0),@STRING(@MINUTE($WAITLOOPTIME),0))
-@STRING(@MONTH($CHECKDATE),0)&"-"&@STRING(@DAY($CHECKDATE),0)&"-"&@STRING(@YEAR($CHECKDATE)+1900,0)
-@SUM(S6..S8)
-`
+@STRING(@MONTH($CHECKDATE),0)&"-"&@STRING(@DAY($CHECKDATE),0)&"-"&@STRING(@YEAR($CHECKDATE)+1900,0)`
 }
