@@ -17,7 +17,12 @@ func TestParser(grammar string, test string) (results string) {
 	for _, t := range strings.Split(test, "\n") {
 		s, errP := parser.ParseAndGetAst(t, nil)
 		if errP != nil {
-			results += fmt.Sprintf("s:\nError: %s\n", t, errP.Error())
+			if printTrees {
+				results += fmt.Sprintf("s:\nError: %s\n", t, errP.Error())
+			} else {
+				results += fmt.Sprintf("fail: %s\n", t)
+			}
+
 		} else {
 			if printTrees {
 				results += fmt.Sprintf("%s:\n%s\n", t, s)
@@ -75,5 +80,14 @@ hello
 "a"#OR#"b"
 1<>2
 ($CHECKDATE<=22.2)#OR#($INCLUDEWAIT=0)#OR#($QUARFLAG<>1)
-($CHECKDATE<=<<L:\\Vru\\Flags\\Lincflag.Wk3>>$A$2)#OR#($INCLUDEWAIT=0)#OR#($QUARFLAG<>1)`
+($CHECKDATE<=<<L:\\Vru\\Flags\\Lincflag.Wk3>>$A$2)#OR#($INCLUDEWAIT=0)#OR#($QUARFLAG<>1)
++"{goto}"&@CELL("coord",$WAITLOOPTIME)&"~{esc}@NOW+@TIME(0,10,0)~{edit}{calc}~{recalc waitparts}"
++"{if ($CHECKDATE<=<<"&$FLAGFILE&">>$A$2)#OR#($INCLUDEWAIT=0)#OR#($QUARFLAG<>1)}{branch startrun}"
++"{indicate "" "&$FLAGFILE&" Wrong Date, Need "&$I$7&", Waiting Until "&$I$5&":"&$I$6&" ""}{wait "&@STRING($WAITLOOPTIME,5)&"}{branch \B}"
++"{recalc \B}{system """&"md "&$B$303&@RIGHT("0000"&@STRING(@YEAR($ENDDATE)+1900,0),4)&""""&"}"
+@IF(@HOUR($WAITLOOPTIME)<10,"0"&@STRING(@HOUR($WAITLOOPTIME),0),@STRING(@HOUR($WAITLOOPTIME),0))
+@IF(@MINUTE($WAITLOOPTIME)<10,"0"&@STRING(@MINUTE($WAITLOOPTIME),0),@STRING(@MINUTE($WAITLOOPTIME),0))
+@STRING(@MONTH($CHECKDATE),0)&"-"&@STRING(@DAY($CHECKDATE),0)&"-"&@STRING(@YEAR($CHECKDATE)+1900,0)
+@SUM(S6..S8)
+`
 }
