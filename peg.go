@@ -37,11 +37,10 @@ func TestParser(grammar string, test string) (results string) {
 func GrammarExample() string {
 	return `
 
-
 :note: Grammar with strings
 FORMULA      ←  '+'? EXPR
 EXPR         ←  ATOM (BINOP ATOM)*
-ATOM         ←  NUMBER / STRING / ATFN / RANGE / REF / '(' EXPR ')'
+ATOM         ← [ \t]* ( NUMBER / STRING / ATFN / RANGE / REF / '(' EXPR ')' ) [ \t]*
 ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?  
 FN_NAME      ←  <[A-Za-z]*>
 BINOP        ←  '<>' / '<=' / '>=' / '#OR#'/ [-+/*&=<>]
@@ -56,7 +55,7 @@ ROW          ← INTEGER
 REF_FREE     ←  [a-zA-Z$:0-9_.\\]+
 REF          ← FN_ADDR / LOCAL_ADDR / REF_FREE
 RANGE        ← REF'..'REF
-STRING       ←  ["] < (!('"')./'""')*  > ["] [ \t]*
+STRING       ←  ["] < (!('"')./'""')*  > ["]
 %whitespace  ←  [ \t]*
 
 ---
