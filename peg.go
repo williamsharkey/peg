@@ -40,8 +40,9 @@ func GrammarExample() string {
 :note: Grammar with strings
 FORMULA      ←  '+'? EXPR
 EXPR         ←  ATOM (BINOP ATOM)*
-ATOM         ← [ \t]* ( NUMBER / STRING / ATFN / RANGE / REF / '(' EXPR ')' ) [ \t]*
+ATOM         ← [ \t]* ( NUMBER / STRING / ATFN / URNEG / RANGE / REF / '(' EXPR ')' ) [ \t]*
 ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?  
+URNEG        ←  '-' EXPR
 FN_NAME      ←  <[A-Za-z]*>
 BINOP        ←  '<>' / '<=' / '>=' / '#OR#'/ [-+/*&=<>]
 NUMBER       ←  < [0-9]+ ([.] [0-9]* )? >
