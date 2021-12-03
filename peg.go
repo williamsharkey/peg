@@ -74,7 +74,7 @@ ATFN         ←  '@' FN_NAME  ( '(' ( EXPR ( ',' EXPR)* )? ')' )?
 URNEG        ←  '-' EXPR
 FN_NAME      ←  <[A-Za-z]*>
 BINOP        ←  '<>' / '<=' / '>=' / '#OR#'/ [-+/*&=<>]
-NUMBER       ←  < [0-9]+ ([.] [0-9]* )? >
+NUMBER       ←  < ([-])? [0-9]+ ([.] [0-9]* )? >
 INTEGER      ←  < [0-9]+ >
 COL          ← [A-Z][A-Z]?
 ADDR         ← <'$'? COL '$'? ROW> 
