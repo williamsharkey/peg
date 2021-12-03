@@ -34,6 +34,35 @@ func TestParser(grammar string, test string) (results string) {
 	return results
 }
 
+func TestParserPrintTrees(grammar string, test string) (results string) {
+	peg.CommentCharacterSet(":note:")
+	parser, err := peg.NewParser(grammar)
+	if err != nil {
+		return "Grammar Parse Error: " + err.Error()
+	}
+	parser.EnableAst()
+	printTrees := true
+	for _, t := range strings.Split(test, "\n") {
+		s, errP := parser.ParseAndGetAst(t, nil)
+		if errP != nil {
+			if printTrees {
+				results += fmt.Sprintf("fail: %s\n", t)
+				results += fmt.Sprintf("%s\n", errP.Error())
+			} else {
+				results += fmt.Sprintf("fail: %s\n", t)
+			}
+
+		} else {
+			if printTrees {
+				results += fmt.Sprintf("ok: %s\n\n%s\n\n\n", t, s)
+			} else {
+				results += fmt.Sprintf("ok: %s\n", t)
+			}
+		}
+	}
+	return results
+}
+
 func GrammarExample() string {
 	return `
 
